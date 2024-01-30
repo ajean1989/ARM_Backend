@@ -1,0 +1,17 @@
+checkpoints/*
+backend/temp/*
+data/custom_model1/*
+data/custom_model1_test/*
+data/custom_model_object/*
+mlruns/*
+runs/*
+sku110k/*
+.vscode/*
+.pytest_cache/*
+
+app.log
+config.py
+
+*.code-workspace
+*.pyc
+

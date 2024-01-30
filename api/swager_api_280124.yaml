@@ -1,0 +1,614 @@
+openapi: 3.0.3
+info:
+  title: API ARMarket - OpenAPI 3.0
+  description: |
+    API ARMarket for VPS - Link with dataset and datawarehouse - E1 Project.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: ad.jacquenet@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: 5.196.7.246/api-dataset-analyse/v1
+tags:
+  - name: Dataset
+    description: Interact with dataset.
+  - name: Items
+    description: Interact items in datawarehouse.
+  - name: Users
+    description: Interact with users in datawarehouse.
+  - name: Places
+    description: Interact with places indatawarehouse.
+  - name: Scan
+    description: Interact with scan indatawarehouse.
+    
+paths:
+  /dataset/{id}:
+    get:
+      tags:
+        - Dataset
+      summary: Retrieve dataset
+      description: Retrieve dataset in zip, format dataset_[id]_date.zip. 
+      operationId: getDataset
+      parameters:
+        - name: id
+          in: path
+          description: dataset's id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Fichier ZIP non trouvé
+        '401':
+          description: ID inexistant ou vide
+      security:
+        - api_key: []
+        
+  /dataset/frames/:
+    post:
+      tags:
+        - Dataset
+      summary: Add a new frame with metadata in dataset
+      description: |
+        Add a new frame with an array of binaries [image, annotation, metadata] in dataset collection.
+        
+        ```
+        annotation = b'[{
+            "label" : "Object",
+            "label_int" : 0,
+            "bounding box" : [0.11212, 0.11, 0.4564, 0.4546]
+          },
+          {
+            "label" : "bla",
+            "label_int" : 2,
+            "bounding box" : [0.11, 0.11, 0.45, 0.45]
+          }]'
+        
+        metadata = b'{
+            "dataset_id" : 0, 
+            "dataset_extraction" : "ARM", 
+            "pretreatment" : False, 
+            "data_augmentation" : False, 
+            "test" : True}'
+        
+        [("files",(open(img_path,'rb'), ("files",annotation),("files",metadata)]``` 
+        
+      operationId: addFrame
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files :
+                  type : array 
+                  items : 
+                    type: string
+                    format: binary
+
+      responses:
+        '200':
+          description: Successful operation
+        '418':
+          description: Invalid input
+      security:
+        - api_key: []
+
+    put:
+      tags:
+        - Dataset
+      summary: Modify a mongo document
+      description: |
+        Modify Mongo document with JSON object as : 
+        
+        ```
+        {
+          "id" : str(ObjectId("hex")),
+          "query" : {
+            <document_field> : value
+            <document_field> : value
+            },
+          "test" : boolean)
+        }
+        ``` 
+        Fields can be : "name", "pre_treatment", "data_augmentation", "dataset", "training_data".
+        
+        "test" to choose dataset collection or dataset_test collection.
+      operationId: modifyFrame
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                query:
+                  type: object
+                  properties:
+                    field:
+                       type: string
+                test:
+                  type: boolean
+      responses:
+        '200':
+            description: Successful operation
+        '418':
+          description: Invalid frame id value
+      security:
+        - api_key: []
+        
+  /dataset/frames/{id}: 
+    delete:
+      tags:
+        - Dataset
+      summary: Delete a frame
+      description: Delete a mongo document
+      operationId: deleteFrame
+      parameters:
+        - in: path
+          name : id
+          schema:
+            type: string
+          required: true
+          description : hexa de l'ObjectId
+      responses:
+        '200':
+            description: Successful operation
+        '400':
+          description: Invalid frame id value
+      security:
+        - api_key: []
+  
+  
+  /items/:
+    post:
+      tags:
+        - Items
+      summary: Record item in datawarehouse
+      description: Record item in datawarehouse
+      operationId: recordItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_code :
+                  type : string
+                brand : 
+                  type: string
+                name : 
+                  type: string
+                ingredient :                     
+                  type: string
+                allergen : 
+                  type: string
+                nutriment : 
+                  type: string
+                nutriscore : 
+                  type: string
+                ecoscore : 
+                  type: string
+                packaging : 
+                  type: string
+                image : 
+                  type: string
+                url_openfoodfact : 
+                  type: string
+      responses:
+        '200':
+          description: successful operation
+          
+        '418':
+          description: Invalid input
+    put:
+      tags:
+        - Items
+      summary: update an item
+      description: update an item
+      operationId: modifyItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_code :
+                  type : string
+                brand : 
+                  type: string
+                name : 
+                  type: string
+                ingredient :                     
+                  type: string
+                allergen : 
+                  type: string
+                nutriment : 
+                  type: string
+                nutriscore : 
+                  type: string
+                ecoscore : 
+                  type: string
+                packaging : 
+                  type: string
+                image : 
+                  type: string
+                url_openfoodfact : 
+                  type: string
+      responses:
+        '200':
+            description: Successful operation
+        '418':
+          description: Invalid input
+      security:
+        - api_key: []
+    get:
+      tags:
+        - Items
+      summary: Retrieve all items
+      description: Retrieve Item
+      operationId: getItems
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - api_key: []
+  /item/{id}:
+    get:
+      tags:
+        - Items
+      summary: Retrieve an item
+      description: Retrieve an item
+      operationId: getItem
+      parameters:
+        - name: id
+          in: path
+          description: item's id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid id value
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - Items
+      summary: Delete an item
+      description: Delete an item
+      operationId: deleteItem
+      parameters:
+        - in: path
+          name : id
+          schema:
+            type: string
+          required: true
+          description : bar code
+      responses:
+        '200':
+            description: Successful operation
+        '418':
+          description: Invalid input
+      security:
+        - api_key: []
+  /users/:
+    post:
+      tags:
+        - Users
+      summary: Record user in datawarehouse
+      description: Record user in datawarehouse
+      operationId: recordUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                  id : 
+                    type: string
+                  name : 
+                    type: string
+                  age : 
+                    type: integer
+                  gender : 
+                    type: integer
+      responses:
+        '200':
+          description: successful operation
+          
+        '405':
+          description: Invalid input
+    get:
+      tags:
+        - Users
+      summary: Retrieve all user
+      description: Retrieve all user
+      operationId: getUsers
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - api_key: []
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Retrieve User
+      description: Retrieve User
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          description: item's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+        '418':
+          description: Invalid id value
+      security:
+        - api_key: []
+    put:
+      tags:
+        - Users
+      summary: update an item
+      description: update an item
+      operationId: modifyUser
+      parameters:
+        - in: path
+          name : id
+          schema:
+            type: integer
+          required: true
+          description : bar code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username : 
+                  type: string
+                last_name : 
+                  type: string
+                first_name :                     
+                  type: string
+                age : 
+                  type: integer
+                gender : 
+                  type: integer
+      responses:
+        '200':
+            description: Successful operation
+        '418':
+          description: Invalid frame id value
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - Users
+      summary: Delete a user
+      description: Delete a user
+      operationId: deleteUser
+      parameters:
+        - in: path
+          name : id
+          schema:
+            type: integer
+          required: true
+          description : User id
+      responses:
+        '200':
+            description: Successful operation
+        '418':
+          description: Invalid id value
+      security:
+        - api_key: []
+  
+  /places/:
+    post:
+      tags:
+        - Places
+      summary: Record place in datawarehouse
+      description: Record place when there is a scan.
+      operationId: recordPlace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                adresse:
+                  type: string
+                postcode:
+                  type: string
+                city:
+                  type: string
+      responses:
+        '200':
+          description: successful operation
+        '418':
+          description: Invalid input
+    get:
+      tags:
+        - Places
+      summary: Retrieve all places
+      description: Retrieve all places
+      operationId: getPlaces
+      responses:
+        '200':
+          description: successful operation
+      security:
+        - api_key: []
+  /places/{id}:
+    get:
+      tags:
+        - Places
+      summary: Retrieve place
+      description: Retrieve place
+      operationId: getPlace
+      parameters:
+        - name: id
+          in: path
+          description: place's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+        '418':
+          description: Invalid id value
+      security:
+        - api_key: []
+    put:
+      tags:
+        - Places
+      summary: update an place
+      description: update an place
+      operationId: modifyPlace
+      parameters:
+        - in: path
+          name : id
+          schema:
+            type: integer
+          required: true
+          description : place id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                adresse:
+                  type: string
+                postcode:
+                  type: string
+                city:
+                  type: string
+      responses:
+        '200':
+            description: Successful operation
+        '418':
+          description: Invalid frame id value
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - Places
+      summary: Delete a place
+      description: Delete a place
+      operationId: deletePlace
+      parameters:
+        - in: path
+          name : id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+            description: Successful operation
+        '418':
+          description: Invalid frame id value
+      security:
+        - api_key: []
+  /scan/:
+    post:
+      tags:
+        - Scan
+      summary: Record scan in datawarehouse
+      description: Record scan in datawarehouse
+      operationId: recordScan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_place:
+                  type: integer
+                id_item:
+                  type: string
+                id_user:
+                  type: integer
+      responses:
+        '200':
+          description: successful operation
+          
+        '418':
+          description: Invalid input
+    get:
+      tags:
+        - Scan
+      summary: Retrieve scan
+      description: Retrieve scan
+      operationId: getScan
+      parameters:
+        - in: query
+          name: id_user
+          schema:
+            type: integer
+          required: false
+      responses:
+        '200':
+          description: successful operation
+        '418':
+          description: Invalid id value
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - Scan
+      summary: Delete a scan
+      description: Delete a scan
+      operationId: deleteScan
+      parameters:
+        - in: query
+          name: id_user
+          schema:
+            type: integer
+          required: false
+      responses:
+        '200':
+            description: Successful operation
+        '418':
+          description: Invalid frame id value
+      security:
+        - api_key: []
+  
+        
+  
+
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header

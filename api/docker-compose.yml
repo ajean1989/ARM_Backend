@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  my_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports :
+      - 8000:80 
+    volumes : 
+      - ./app:/api/app
+    # Ajoutez d'autres configurations de service si nécessaire
