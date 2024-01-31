@@ -1,10 +1,15 @@
 version: '3.8'
 
 services:
-  my_service:
+  arm-backend:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      SERVER_VPS1_IP : ${SERVER_VPS1_IP:?error}
+      USER_MARIADB : ${USER_MARIADB:?error}
+      PWD_MARIADB : ${PWD_MARIADB:?error}
+      ARM_VPS1_API_KEY : ${ARM_VPS1_API_KEY:?error}
     ports :
       - 8000:80 
     volumes : 

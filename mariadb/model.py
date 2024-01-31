@@ -1,13 +1,8 @@
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-print(sys.path)
-
-from backend.config import *
+from config import *
 
 from datetime import datetime
 
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Sequence, ForeignKey, Table, Text
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 
 

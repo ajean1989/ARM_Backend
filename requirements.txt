@@ -1,17 +1,4 @@
-pandas
-numpy
-torch --index-url https://download.pytorch.org/whl/cu118
-torchvision --index-url https://download.pytorch.org/whl/cu118
-opencv-python 
-pycocotools 
-matplotlib 
-onnxruntime 
-onnx
-ultralytics
-pytube
-pyzbar
-pymongo
+
 sqlalchemy
 mariadb
 pytest
-# matplotlib et segmen t anything ne s'install pas à partir de ce fichier ?  Faire un pip install individuel 

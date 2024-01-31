@@ -3,8 +3,7 @@ import os
 from fastapi.testclient import TestClient
 from bson.objectid import ObjectId
 
-from app.main import app, mongo_connect, maria_connect
-from app.mongo import Mongo
+from app.main import app, maria_connect
 from app.maria import Maria
 from config import API_KEYS
 
@@ -15,11 +14,6 @@ def override_maria():
     return Maria(True)
 
 
-def override_mongo():
-    return Mongo(True)
-
-
-app.dependency_overrides[mongo_connect] = override_mongo
 app.dependency_overrides[maria_connect] = override_maria
 
 
@@ -37,184 +31,6 @@ def test_api_key():
 
     assert response.json() == {"Hello": "World"}
     
-
-
-
-def test_get_dataset(binary_annotation, binary_metadata, binary_annotation_1):
-
-    mongo = Mongo(test = True)
-
-    # Ajout de 2 frames
-    
-    mongo.reset_db()
-    img = open("app/tests/sample/img_1.png","rb")
-    files = [('files', img),("files", binary_annotation), ("files" , binary_metadata)]
-    response1 = client.post("/dataset/frames/", files = files, headers=headers)
-
-    assert response1.status_code == 200
-
-    img = open("app/tests/sample/img_1.png","rb")
-    files = [('files', img),("files", binary_annotation_1), ("files" , binary_metadata)]
-    response2 = client.post("/dataset/frames/", files = files, headers=headers)
-
-    assert response2.status_code == 200
-
-    # Téléchargement
-    response = client.get("/dataset/0", headers=headers)
-    assert response.status_code == 200
-
-    # Récupérer le zip
-    print(response)
-    with open(os.path.join("app","dataset_0.zip"), "wb") as zip:
-        zip.write(response.content)
-
-    assert "dataset_0.zip" in os.listdir("app")
-
-    # Supprimer le zip
-    os.remove(os.path.join("app","dataset_0.zip"))
-    assert "dataset_0.zip" not in os.listdir("app")
-
-    # Supprimer le contenu de temp
-    mongo.remove_temp_get_dataset()
-
-    mongo.client.close()
-
-
-
-def test_add_frame(binary_annotation, binary_metadata):
-
-    mongo = Mongo(test = True)
-
-    # Ajout d'un frame
-    
-    mongo.reset_db()
-    img = open("app/tests/sample/img_1.png","rb")
-    files = [('files', img),("files", binary_annotation), ("files" , binary_metadata)]
-    response = client.post("/dataset/frames/", files = files, headers=headers)
-
-    assert response.status_code == 200
-
-    # Image n'est pas un jpg, png, etc. 
-    mongo.reset_db()
-    img = open("app/tests/sample/test.txt","rb")
-    files = [('files', img),("files", binary_annotation), ("files" , binary_metadata)]
-    response = client.post("/dataset/frames/", files = files, headers=headers)
-
-    assert response.status_code == 405
-
-    # Array n'a pas 3 éléments
-    mongo.reset_db()
-    img = open("app/tests/sample/img_1.png","rb")
-    files = [('files', img),("files", binary_annotation)]
-    response = client.post("/dataset/frames/", files = files, headers=headers)
-
-    assert response.status_code == 405
-    assert response.json() == {"error": "array must have 3 binaries elements"}
-
-    mongo.client.close()
-
-
-def test_update_frame(binary_annotation, binary_metadata):
-
-    mongo = Mongo(test = True)
-
-    # Ajout d'un frame
-    mongo.reset_db()
-    img = open("app/tests/sample/img_1.png","rb")
-    files = [('files', img),("files", binary_annotation), ("files" , binary_metadata)]
-
-
-    response = client.post("/dataset/frames/", files = files, headers=headers)
-    assert response.status_code == 200
-
-    res = mongo.dataset_collection.find_one({})
-    assert res["data_augmentation"] == False 
-
-    # Modification de data_augmentation
-    id_init = (res["_id"]) 
-    id = str(res["_id"]) 
-    pp = ObjectId(id)
-    assert id_init == pp 
-
-    update = {
-        "id" : id,
-        "query" : {"data_augmentation" : True},
-        "test" : True
-    }
-
-    response = client.put("/dataset/frames/", json = update, headers=headers)
-    assert response.status_code == 200
-
-    res_updated = mongo.dataset_collection.find_one({"_id": id_init})
-    assert res_updated["data_augmentation"] == True 
-
-    # Multi modification
-
-    update = {
-        "id" : id,
-        "query" : {"data_augmentation" : True,
-                   "pre_treatment" : True},
-        "test" : True
-    }
-
-    response = client.put("/dataset/frames/", json = update, headers=headers)
-    assert response.status_code == 200
-
-    res_updated = mongo.dataset_collection.find_one({"_id": id_init})
-    assert res_updated["data_augmentation"] == True 
-    assert res_updated["pre_treatment"] == True 
-
-
-    # Cas où le champ de query n'existe pas
-
-    update = {
-        "id" : id,
-        "query" : {"data_augment" : True},
-        "test" : True
-    }
-
-    response = client.put("/dataset/frames/", json = update, headers=headers)
-    assert response.status_code == 405
-
-    mongo.client.close()
-
-
-def test_delete_frame(binary_annotation, binary_metadata):
-
-    mongo = Mongo(test = True)
-
-    # Ajout d'un frame
-    mongo.reset_db()
-    img = open("app/tests/sample/img_1.png","rb")
-    files = [('files', img),("files", binary_annotation), ("files" , binary_metadata)]
-    response = client.post("/dataset/frames/", files = files, headers=headers)
-
-    assert response.status_code == 200
-
-    # Suprression 
-    res = mongo.dataset_collection.find_one({})
-
-    nb =  mongo.dataset_collection.count_documents({})
-    assert nb == 1
-
-    id = res["_id"]
-    response = client.delete(f"/dataset/frames/{id}", headers=headers)
-
-    nb =  mongo.dataset_collection.count_documents({})
-
-    assert nb == 0
-    assert response.status_code == 200
-
-
-    # Bad id 
-
-    response = client.delete(f"/dataset/frames/000111125478541154555255", headers=headers)
-    assert response.status_code == 405
-
-    response = client.delete(f"/dataset/frames/00011", headers=headers)
-    assert response.status_code == 405
-
-    mongo.client.close()
 
 
 
