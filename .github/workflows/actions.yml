@@ -1,4 +1,4 @@
-name: Custom GitHub Action
+name: ARM_Backend CI/CD
 
 on:
   push:

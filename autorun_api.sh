@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd ./api
-docker compose up
+docker compose up -d
