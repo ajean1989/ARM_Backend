@@ -38,7 +38,7 @@ jobs:
         run: ./ARM_Starter/autorun.sh
 
       - name: Execute autorun.sh from "repo"
-        run: ls -a
+        run: ls -a && printenv
     
 
       - name: execute api container
