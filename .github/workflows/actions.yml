@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    environment: production
+    environment: my-env
     env:
       ARM_VPS1_API_KEY: ${{ secrets.ARM_VPS1_API_KEY }}
       PWD_MARIADB: ${{ secrets.PWD_MARIADB }}
