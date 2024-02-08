@@ -18,7 +18,7 @@ jobs:
         run: git clone https://github.com/ajean1989/ARM_Starter.git
 
       - name: make "repo" executable
-        run: sudo chmod ugo+x -r ./ARM_Starter/autorun.sh
+        run: sudo chmod ugo+x ./ARM_Starter/autorun.sh
     
       - name: Execute autorun.sh from "repo"
         run: ./ARM_Starter/autorun.sh
