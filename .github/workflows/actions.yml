@@ -5,18 +5,22 @@ on:
     branches:
       - main
   workflow_dispatch:
+  
 
-env:
-  ARM_VPS1_API_KEY: ${{ my-env.secrets.ARM_VPS1_API_KEY }}
-  PWD_MARIADB: ${{ my-env.secrets.PWD_MARIADB }}
-  PWD_MONGODB: ${{ my-env.secrets.PWD_MONGODB }}
-  SERVER_VPS1_IP: ${{ my-env.secrets.SERVER_VPS1_IP }}
-  USER_MARIADB: ${{ my-env.secrets.USER_MARIADB }}
-  USER_MONGODB: ${{ my-env.secrets.USER_MONGODB }}
+
   
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    environment: production
+    env:
+      ARM_VPS1_API_KEY: ${{ my-env.secrets.ARM_VPS1_API_KEY }}
+      PWD_MARIADB: ${{ my-env.secrets.PWD_MARIADB }}
+      PWD_MONGODB: ${{ my-env.secrets.PWD_MONGODB }}
+      SERVER_VPS1_IP: ${{ my-env.secrets.SERVER_VPS1_IP }}
+      USER_MARIADB: ${{ my-env.secrets.USER_MARIADB }}
+      USER_MONGODB: ${{ my-env.secrets.USER_MONGODB }}
 
 
     steps:
