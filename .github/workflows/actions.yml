@@ -1,0 +1,26 @@
+name: Custom GitHub Action
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v2
+
+      - name: Clone "repo" repository
+        run: git clone https://github.com/ajean1989/ARM_Starter.git
+
+      - name: Execute autorun.sh from "repo"
+        run: ./ARM_Starter/autorun.sh
+
+      - name: execute api container
+        run: ./ARM_Backend/autorun_api.sh
+
+      - name: execute api container
+        run: cd ARM_Backend/api && python -3 pytest
