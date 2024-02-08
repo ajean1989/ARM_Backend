@@ -33,8 +33,8 @@ jobs:
     
 
       - name: execute api container
-        workdir: ARM_Backend
-        run: ./ARM_Backend/autorun_api.sh
+        working-directory: ARM_Backend
+        run: ./autorun_api.sh
 
       - name: execute api container
         run: cd ARM_Backend/api && python -3 pytest
