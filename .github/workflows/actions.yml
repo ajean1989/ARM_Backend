@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout main repository
         uses: actions/checkout@v4
+        with:
+          path: ARM_Backend
 
       - name: Clone "repo" repository
         run: git clone https://github.com/ajean1989/ARM_Starter.git
