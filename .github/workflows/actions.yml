@@ -6,9 +6,18 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  ARM_VPS1_API_KEY: ARM_VPS1_API_KEY
+  PWD_MARIADB: PWD_MARIADB
+  PWD_MONGODB: PWD_MONGODB
+  SERVER_VPS1_IP: SERVER_VPS1_IP
+  USER_MARIADB: USER_MARIADB
+  USER_MONGODB: USER_MONGODB
+  
 jobs:
   build:
     runs-on: ubuntu-latest
+
 
     steps:
       - name: Checkout main repository
