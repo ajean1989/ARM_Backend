@@ -3,7 +3,7 @@ name: ARM_Backend CI/CD
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
   
