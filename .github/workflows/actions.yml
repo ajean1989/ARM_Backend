@@ -24,8 +24,6 @@ jobs:
     steps:
       - name: Checkout main repository
         uses: actions/checkout@v4
-        with:
-          path: ARM_Backend
 
       - name: info
         run: pwd && ls -l
