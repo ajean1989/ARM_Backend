@@ -31,17 +31,16 @@ jobs:
         run: pwd && ls -l
 
       - name: Clone "repo" repository
-        run: git clone https://github.com/ajean1989/ARM_Starter.git
+        run: cd .. && git clone https://github.com/ajean1989/ARM_Starter.git
 
       - name: info
         run: pwd && ls -l
 
       - name: lancer le starter kit
-        run: cd ./ARM_Starter/run && bash run_build.sh
+        run: cd ./ARM_Starter/run && bash build.sh
 
       - name: execute api container
-        working-directory: ARM_Backend
-        run: ./autorun_api.sh
+        run: cd ../.. && cd ./ARM_Backend/run && bash build.sh
 
   tests:
     runs-on: ubuntu-latest
@@ -66,12 +65,11 @@ jobs:
         run: pwd && ls -l
 
       - name: Clone "repo" repository
-        run: git clone https://github.com/ajean1989/ARM_Starter.git
+        run: cd .. && git clone https://github.com/ajean1989/ARM_Starter.git
 
       - name: lancer le starter kit
-        run: cd ./ARM_Starter/run && bash run_build.sh
+        run: cd ./ARM_Starter/run && bash build.sh
 
       - name: execute api-tests container
-        working-directory: ARM_Backend
-        run: ./run/tests.sh
+        run: cd ../.. && cd ./ARM_Backend/run && bash build.sh
 
