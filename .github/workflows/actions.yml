@@ -29,7 +29,7 @@ jobs:
         run: pwd && ls -l
 
       - name: Clone "repo" repository
-        run: cd .. && git clone https://github.com/ajean1989/ARM_Starter.git
+        run: cd .. && git clone https://github.com/ajean1989/ARM_Starter.git && pwd
 
       - name: info
         run: pwd && ls -l
