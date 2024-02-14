@@ -33,6 +33,9 @@ jobs:
       - name: Clone "repo" repository
         run: git clone https://github.com/ajean1989/ARM_Starter.git
 
+      - name: info
+        run: pwd && ls -l
+
       - name: lancer le starter kit
         run: cd ./ARM_Starter/run && bash run_build.sh
 
