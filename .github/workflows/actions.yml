@@ -8,37 +8,37 @@ on:
 
   
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # build:
+  #   runs-on: ubuntu-latest
     
-    environment: my-env
-    env:
-      ARM_VPS1_API_KEY: ${{ secrets.ARM_VPS1_API_KEY }}
-      PWD_MARIADB: ${{ secrets.PWD_MARIADB }}
-      PWD_MONGODB: ${{ secrets.PWD_MONGODB }}
-      SERVER_VPS1_IP: ${{ secrets.SERVER_VPS1_IP }}
-      USER_MARIADB: ${{ secrets.USER_MARIADB }}
-      USER_MONGODB: ${{ secrets.USER_MONGODB }}
+  #   environment: my-env
+  #   env:
+  #     ARM_VPS1_API_KEY: ${{ secrets.ARM_VPS1_API_KEY }}
+  #     PWD_MARIADB: ${{ secrets.PWD_MARIADB }}
+  #     PWD_MONGODB: ${{ secrets.PWD_MONGODB }}
+  #     SERVER_VPS1_IP: ${{ secrets.SERVER_VPS1_IP }}
+  #     USER_MARIADB: ${{ secrets.USER_MARIADB }}
+  #     USER_MONGODB: ${{ secrets.USER_MONGODB }}
 
 
-    steps:
-      - name: Checkout main repository
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout main repository
+  #       uses: actions/checkout@v4
 
-      - name: info
-        run: pwd && ls -l
+  #     - name: info
+  #       run: pwd && ls -l
 
-      - name: Clone "repo" repository
-        run: cd .. && git clone https://github.com/ajean1989/ARM_Starter.git && pwd
+  #     - name: Clone "repo" repository
+  #       run: cd .. && git clone https://github.com/ajean1989/ARM_Starter.git && pwd
 
-      - name: info
-        run: pwd && ls -l
+  #     - name: info
+  #       run: pwd && ls -l
 
-      - name: lancer le starter kit
-        run: cd ../ARM_Starter && bash ./run/build.sh
+  #     - name: lancer le starter kit
+  #       run: cd ../ARM_Starter && bash ./run/build.sh
 
-      - name: execute api container
-        run: pwd && ls && bash ./run/build.sh
+  #     - name: execute api container
+  #       run: pwd && ls && bash ./run/build.sh
 
   tests:
     runs-on: ubuntu-latest
@@ -71,11 +71,11 @@ jobs:
 
       - name: Run tests unitaires
         run: |
-          docker exec api-backend ls
+          docker exec api-backend python -m pytest
 
       - name: Run tests fontionnels
         run: |
-          docker exec tests-api-backend "python -m pytest"
+          docker exec tests-api-backend python -m pytest
 
 
 
