@@ -102,7 +102,7 @@ jobs:
 
 
     - name: rm api-backend active container
-      run: ssh -i ~/.ssh/id_test -o StrictHostKeyChecking=no debian@$SERVER_VPS1_IP "if docker container ps -a | grep -q 'api-backend'; then docker rm -f api-backend; fi"
+      run: ssh -i ~/.ssh/id_test -o StrictHostKeyChecking=no debian@$SERVER_VPS1_IP "if [docker container ps -a | grep -q 'api-backend']; then docker rm -f api-backend; fi"
 
     - name: Copy mariadb files
       run: scp -i ~/.ssh/id_test -r ./api debian@$SERVER_VPS1_IP:/home/debian/ARMarket/ARM_Backend/

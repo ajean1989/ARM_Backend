@@ -10,5 +10,8 @@ headers = {'X-API-Key': list(API_KEYS.keys())[0]}
 
 
 def test_helloworld() :
-    response = httpx.get(f"http://{api}/", headers = headers)
+    response = httpx.get(f"http://{api}/:6001", headers = headers)
+    assert response.status_code == 200
+
+    response = httpx.get(f"http://{api}/api-backend/", headers = headers)
     assert response.status_code == 200
