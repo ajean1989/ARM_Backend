@@ -27,25 +27,48 @@ jobs:
         with:
           path: ARM_Backend
 
+      - name: info
+        run: pwd && ls -l
+
       - name: Clone "repo" repository
         run: git clone https://github.com/ajean1989/ARM_Starter.git
 
-      - name: make "repo" executable
-        run: |
-          sudo chmod ugo+x ./ARM_Starter/autorun.sh
-          sudo chmod ugo+x ./ARM_Backend/autorun_api.sh
-
-        
-      - name: Execute autorun.sh from "repo"
-        run: ./ARM_Starter/autorun.sh
-
-      - name: Execute autorun.sh from "repo"
-        run: ls -a && printenv
-    
+      - name: lancer le starter kit
+        run: cd ./ARM_Starter/run && bash run_build.sh
 
       - name: execute api container
         working-directory: ARM_Backend
         run: ./autorun_api.sh
 
-      - name: execute api container
-        run: cd ARM_Backend/api && python -3 pytest
+  tests:
+    runs-on: ubuntu-latest
+    
+    environment: my-env
+    env:
+      ARM_VPS1_API_KEY: ${{ secrets.ARM_VPS1_API_KEY }}
+      PWD_MARIADB: ${{ secrets.PWD_MARIADB }}
+      PWD_MONGODB: ${{ secrets.PWD_MONGODB }}
+      SERVER_VPS1_IP: ${{ secrets.SERVER_VPS1_IP }}
+      USER_MARIADB: ${{ secrets.USER_MARIADB }}
+      USER_MONGODB: ${{ secrets.USER_MONGODB }}
+
+
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v4
+        with:
+          path: ARM_Backend
+
+      - name: info
+        run: pwd && ls -l
+
+      - name: Clone "repo" repository
+        run: git clone https://github.com/ajean1989/ARM_Starter.git
+
+      - name: lancer le starter kit
+        run: cd ./ARM_Starter/run && bash run_build.sh
+
+      - name: execute api-tests container
+        working-directory: ARM_Backend
+        run: ./run/tests.sh
+

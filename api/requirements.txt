@@ -1,6 +1,5 @@
 fastapi
 uvicorn
-pymongo
 sqlalchemy
 mariadb
 Pillow
