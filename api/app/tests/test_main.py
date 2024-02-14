@@ -1,7 +1,6 @@
 import os
 
 from fastapi.testclient import TestClient
-from bson.objectid import ObjectId
 
 from app.main import app, maria_connect
 from app.maria import Maria
