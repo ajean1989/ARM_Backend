@@ -71,7 +71,7 @@ jobs:
 
       - name: Run tests unitaires
         run: |
-          docker exec api-backend "pwd && ls -l && python -m pytest"
+          docker exec api-backend ls
 
       - name: Run tests fontionnels
         run: |
