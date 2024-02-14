@@ -66,12 +66,12 @@ jobs:
       - name: lancer le starter kit
         run: cd ../ARM_Starter && bash ./run/build.sh
 
+      - name: execute api container
+        run: pwd && ls && bash ./run/tests.sh
+
       - name: Run tests unitaires
         run: |
           docker exec api-backend pytest
-
-      - name: execute api container
-        run: pwd && ls && bash ./run/tests.sh
 
       - name: Run tests fontionnels
         run: |
