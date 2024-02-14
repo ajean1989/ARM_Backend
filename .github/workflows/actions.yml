@@ -38,7 +38,7 @@ jobs:
         run: cd ../ARM_Starter && bash ./run/build.sh
 
       - name: execute api container
-        run: pwd && -ls && bash ./run/build.sh
+        run: pwd && ls && bash ./run/build.sh
 
   tests:
     runs-on: ubuntu-latest
@@ -69,5 +69,5 @@ jobs:
         run: cd ../ARM_Starter && bash ./run/build.sh
 
       - name: execute api container
-        run: pwd && -ls && bash ./run/tests.sh
+        run: pwd && ls && bash ./run/tests.sh
 
