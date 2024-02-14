@@ -1,2 +1,5 @@
 cd ./api
-docker compose up  --build --force-recreate -d
+
+docker compose up --build --force-recreate -d
+
+cd ..

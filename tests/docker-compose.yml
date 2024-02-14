@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: tests
+    container_name: tests-api-backend
     environment:
       SERVER_VPS1_IP : ${SERVER_VPS1_IP:?error}
       USER_MARIADB : ${USER_MARIADB:?error}
@@ -13,7 +13,6 @@ services:
       ARM_VPS1_API_KEY : ${ARM_VPS1_API_KEY:?error}
       USER_MONGODB: ${USER_MONGODB:?error}
       PWD_MONGODB: ${PWD_MONGODB:?error}
-
 
     networks:
       - production-network
