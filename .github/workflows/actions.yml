@@ -69,3 +69,7 @@ jobs:
       - name: execute api container
         run: pwd && ls && bash ./run/tests.sh
 
+      - name: Run tests
+        run: |
+          docker exec tests pytest
+
