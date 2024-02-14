@@ -66,10 +66,14 @@ jobs:
       - name: lancer le starter kit
         run: cd ../ARM_Starter && bash ./run/build.sh
 
+      - name: Run tests unitaires
+        run: |
+          docker exec api-backend pytest
+
       - name: execute api container
         run: pwd && ls && bash ./run/tests.sh
 
-      - name: Run tests
+      - name: Run tests fontionnels
         run: |
           docker exec tests-api-backend pytest
 
@@ -102,7 +106,7 @@ jobs:
 
 
     - name: rm api-backend active container
-      run: ssh -i ~/.ssh/id_test -o StrictHostKeyChecking=no debian@$SERVER_VPS1_IP "if [docker container ps -a | grep -q 'api-backend']; then docker rm -f api-backend; fi"
+      run: cat ~/.ssh/id_test && ssh -i ~/.ssh/id_test -o StrictHostKeyChecking=no debian@$SERVER_VPS1_IP "if [docker container ps -a | grep -q 'api-backend']; then docker rm -f api-backend; fi"
 
     - name: Copy mariadb files
       run: scp -i ~/.ssh/id_test -r ./api debian@$SERVER_VPS1_IP:/home/debian/ARMarket/ARM_Backend/
