@@ -71,7 +71,7 @@ jobs:
 
       - name: Run tests
         run: |
-          docker exec tests pytest
+          docker exec tests-api-backend pytest
 
 
 
