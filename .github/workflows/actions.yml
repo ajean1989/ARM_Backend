@@ -35,7 +35,7 @@ jobs:
         run: pwd && ls -l
 
       - name: lancer le starter kit
-        run: cd ../ARM_Starter/run && bash build.sh
+        run: cd ../ARM_Starter && bash ./run/build.sh
 
       - name: execute api container
         run: cd ./ARM_Backend/run && bash build.sh
