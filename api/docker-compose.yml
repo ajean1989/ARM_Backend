@@ -12,7 +12,7 @@ services:
       PWD_MARIADB : ${PWD_MARIADB:?error}
       ARM_VPS1_API_KEY : ${ARM_VPS1_API_KEY:?error}
     ports :
-      - 8000:80 
+      - 6001:6001
     volumes : 
       - ./app:/api/app
     networks:
