@@ -18,7 +18,7 @@ services:
     networks:
       - production-network
     labels:
-      - traefik.http.routers.adminer.rule=PathPrefix(`/api-backend/`)
+      - traefik.http.routers.arm-backend.rule=PathPrefix(`/api-backend/`)
 
 
 networks:
