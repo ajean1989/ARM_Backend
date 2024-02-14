@@ -75,7 +75,7 @@ jobs:
 
       - name: Run tests fontionnels
         run: |
-          docker exec tests-api-backend "cd ./api && pytest"
+          docker exec tests-api-backend "pwd && ls -l && python -m pytest"
 
 
 
