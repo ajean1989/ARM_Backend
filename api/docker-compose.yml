@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: api-backend
     environment:
       SERVER_VPS1_IP : ${SERVER_VPS1_IP:?error}
       USER_MARIADB : ${USER_MARIADB:?error}
@@ -14,7 +15,6 @@ services:
       - 8000:80 
     volumes : 
       - ./app:/api/app
-    # Ajoutez d'autres configurations de service si nécessaire
     networks:
       - production-network
     labels:

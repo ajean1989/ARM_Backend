@@ -73,3 +73,52 @@ jobs:
         run: |
           docker exec tests pytest
 
+
+
+  deploy:
+    needs: tests
+    runs-on: ubuntu-latest
+
+    environment: my-env
+    env:
+      ARM_VPS1_API_KEY: ${{ secrets.ARM_VPS1_API_KEY }}
+      PWD_MARIADB: ${{ secrets.PWD_MARIADB }}
+      PWD_MONGODB: ${{ secrets.PWD_MONGODB }}
+      SERVER_VPS1_IP: ${{ secrets.SERVER_VPS1_IP }}
+      USER_MARIADB: ${{ secrets.USER_MARIADB }}
+      USER_MONGODB: ${{ secrets.USER_MONGODB }}
+      SSH_PRIVATE_KEY_VPS1: ${{ secrets.SSH_PRIVATE_KEY_VPS1 }}
+      SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: info
+      run: pwd && ls && echo "----" && printenv
+
+    - name: private key copy
+      run: mkdir ~/.ssh && echo "$SSH_PRIVATE_KEY_VPS1" > ~/.ssh/id_test && sudo chmod 600 ~/.ssh/id_test
+
+
+    - name: rm api-backend active container
+      run: ssh -i ~/.ssh/id_test -o StrictHostKeyChecking=no debian@$SERVER_VPS1_IP "if docker container ps -a | grep -q 'api-backend'; then docker rm -f api-backend; fi"
+
+    - name: Copy mariadb files
+      run: scp -i ~/.ssh/id_test -r ./api debian@$SERVER_VPS1_IP:/home/debian/ARMarket/ARM_Backend/
+
+    - name: Copy autorun file
+      run: scp -i ~/.ssh/id_test ./run/build.sh debian@$SERVER_VPS1_IP:/home/debian/ARMarket/ARM_Backend/build.sh
+        
+
+    - name: run containers
+      run: |
+        ssh -i ~/.ssh/id_test -o StrictHostKeyChecking=no debian@$SERVER_VPS1_IP "export ARM_VPS1_API_KEY=$ARM_VPS1_API_KEY \
+        && export PWD_MARIADB=$PWD_MARIADB \
+        && export PWD_MONGODB=$PWD_MONGODB \
+        && export SERVER_VPS1_IP=$SERVER_VPS1_IP \
+        && export USER_MARIADB=$USER_MARIADB \
+        && export USER_MONGODB=$USER_MONGODB \
+        && cd /home/debian/ARMarket/ARM_Backend/ \
+        && bash build.sh"
+
