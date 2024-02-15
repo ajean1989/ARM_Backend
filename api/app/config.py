@@ -9,7 +9,8 @@ API_KEYS = {key: "admin"}
 
 # maria DB
 
-adresse_maria = os.getenv("SERVER_VPS1_IP")
+# adresse_maria = os.getenv("SERVER_VPS1_IP") # Se connecte à la base de prod
+adresse_maria = "mariadb"  # Se connecte à la base qui est le même réseau docker 
 port_maria = 3306
 user_maria = os.getenv("USER_MARIADB")
 pass_maria = os.getenv("PWD_MARIADB")
