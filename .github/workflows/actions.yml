@@ -64,7 +64,7 @@ jobs:
         run: cd .. && git clone https://github.com/ajean1989/ARM_Starter.git
       
       - name: create volume 
-      run: cd .. && mkdir -p volumes/mariadb/init
+        run: cd .. && mkdir -p volumes/mariadb/init
 
       - name: private key copy
         run: mkdir ~/.ssh && echo "$SSH_PRIVATE_KEY_VPS1" > ~/.ssh/id_test && sudo chmod 600 ~/.ssh/id_test
