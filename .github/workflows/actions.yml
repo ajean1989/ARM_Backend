@@ -66,6 +66,9 @@ jobs:
       - name: lancer le starter kit
         run: cd ../ARM_Starter && bash ./run/build.sh
 
+      - name: wait util all starter container were on
+        run: sleep 60
+
       - name: execute api container
         run: pwd && ls && bash ./run/tests.sh
 
