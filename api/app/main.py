@@ -33,7 +33,7 @@ app = FastAPI(
 
 
 # Connexion Maria DB
-def maria_connect():        # Permet d'overwrite pour les tests
+def maria_connect():        # Permet d'overwrite pour les tests d'api (voir tests/main.py app.dependency_overrides[maria_connect] = override_maria) 
     return Maria(False)
 
 

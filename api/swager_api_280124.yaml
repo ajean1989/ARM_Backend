@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: API ARMarket - OpenAPI 3.0
+  title: API ARM Backend - OpenAPI 3.0
   description: |
     API ARMarket for VPS - Link with dataset and datawarehouse - E1 Project.
   termsOfService: http://swagger.io/terms/
@@ -14,10 +14,8 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  - url: 5.196.7.246/api-dataset-analyse/v1
+  - url: traefik/api-backend/v1
 tags:
-  - name: Dataset
-    description: Interact with dataset.
   - name: Items
     description: Interact items in datawarehouse.
   - name: Users
@@ -28,149 +26,6 @@ tags:
     description: Interact with scan indatawarehouse.
     
 paths:
-  /dataset/{id}:
-    get:
-      tags:
-        - Dataset
-      summary: Retrieve dataset
-      description: Retrieve dataset in zip, format dataset_[id]_date.zip. 
-      operationId: getDataset
-      parameters:
-        - name: id
-          in: path
-          description: dataset's id
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '400':
-          description: Fichier ZIP non trouvé
-        '401':
-          description: ID inexistant ou vide
-      security:
-        - api_key: []
-        
-  /dataset/frames/:
-    post:
-      tags:
-        - Dataset
-      summary: Add a new frame with metadata in dataset
-      description: |
-        Add a new frame with an array of binaries [image, annotation, metadata] in dataset collection.
-        
-        ```
-        annotation = b'[{
-            "label" : "Object",
-            "label_int" : 0,
-            "bounding box" : [0.11212, 0.11, 0.4564, 0.4546]
-          },
-          {
-            "label" : "bla",
-            "label_int" : 2,
-            "bounding box" : [0.11, 0.11, 0.45, 0.45]
-          }]'
-        
-        metadata = b'{
-            "dataset_id" : 0, 
-            "dataset_extraction" : "ARM", 
-            "pretreatment" : False, 
-            "data_augmentation" : False, 
-            "test" : True}'
-        
-        [("files",(open(img_path,'rb'), ("files",annotation),("files",metadata)]``` 
-        
-      operationId: addFrame
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                files :
-                  type : array 
-                  items : 
-                    type: string
-                    format: binary
-
-      responses:
-        '200':
-          description: Successful operation
-        '418':
-          description: Invalid input
-      security:
-        - api_key: []
-
-    put:
-      tags:
-        - Dataset
-      summary: Modify a mongo document
-      description: |
-        Modify Mongo document with JSON object as : 
-        
-        ```
-        {
-          "id" : str(ObjectId("hex")),
-          "query" : {
-            <document_field> : value
-            <document_field> : value
-            },
-          "test" : boolean)
-        }
-        ``` 
-        Fields can be : "name", "pre_treatment", "data_augmentation", "dataset", "training_data".
-        
-        "test" to choose dataset collection or dataset_test collection.
-      operationId: modifyFrame
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                query:
-                  type: object
-                  properties:
-                    field:
-                       type: string
-                test:
-                  type: boolean
-      responses:
-        '200':
-            description: Successful operation
-        '418':
-          description: Invalid frame id value
-      security:
-        - api_key: []
-        
-  /dataset/frames/{id}: 
-    delete:
-      tags:
-        - Dataset
-      summary: Delete a frame
-      description: Delete a mongo document
-      operationId: deleteFrame
-      parameters:
-        - in: path
-          name : id
-          schema:
-            type: string
-          required: true
-          description : hexa de l'ObjectId
-      responses:
-        '200':
-            description: Successful operation
-        '400':
-          description: Invalid frame id value
-      security:
-        - api_key: []
-  
-  
   /items/:
     post:
       tags:
@@ -266,7 +121,7 @@ paths:
           description: successful operation
       security:
         - api_key: []
-  /item/{id}:
+  /items/{id}:
     get:
       tags:
         - Items
