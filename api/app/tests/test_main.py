@@ -1,4 +1,5 @@
 import os
+import json
 
 from fastapi.testclient import TestClient
 
@@ -350,3 +351,13 @@ def test_scan(place, item, user) :
 
     response = client.delete(f"/places/{id_place}", headers=headers)
     assert response.status_code == 200
+
+def test_auth() :
+
+    data = {"email" : "ad@min.fr",
+            "password" : "pass"}
+    
+    res = client.post(f"/authenticate/", data=data, headers=headers)
+    res = res.json()
+    print(res)
+    assert res["success"] == True

@@ -309,4 +309,10 @@ def test_scan(place, item, user):
     mr.reset_db("item")
     mr.reset_db("user")
 
+def test_authenticate():
+    mr = Maria(test=True)
+
+    res = mr.authenticate("ad@min.fr")
+    print(res)
+    assert res["email"] == "ad@min.fr"
 

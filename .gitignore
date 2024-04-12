@@ -1,8 +1,7 @@
 .vscode/*
 .pytest_cache/*
 
-app.log
-
+*.log
 *.code-workspace
 *.pyc
 
