@@ -7,13 +7,7 @@ from typing import Annotated
 
 from app.maria import Maria
 from app.config import API_KEYS
-from app.log import Logg
-
-#  Log
-
-log = Logg()
-log_debug = log.set_log_api_backend_debug()
-
+from app.log import log
 
 # API KEY
 
@@ -67,7 +61,7 @@ async def read_root():
     try : 
         return {"Hello": "World"}
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e}")
 
 
@@ -98,12 +92,12 @@ async def auth( mr : Annotated[Maria, Depends(maria_connect)], email: Annotated[
         else : 
             return {
                 "success": False,
-                "message": "Something wrong ..."
+                "message": "Something wrong"
             }
             
 
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e, email, password}")
 
 ## Item
@@ -126,10 +120,10 @@ async def record_item(mr : Annotated[Maria, Depends(maria_connect)], item: Item)
     try :
         item = item.model_dump()
         mr.create_item(id_code=item["id_code"], name=item["name"], brand=item["brand"], ingredient=item["ingredient"], allergen=item["allergen"], nutriment=item["nutriment"], nutriscore=item["nutriscore"], ecoscore=item["ecoscore"] , packaging=item["packaging"], image=item["image"], url_openfoodfact=item["url_openfoodfact"])
-        log_debug.debug(f'Item {item["id_code"], item["brand"], item["name"]} enregistré.')
+        log.debug(f'Item {item["id_code"], item["brand"], item["name"]} enregistré.')
         return JSONResponse(content={"message": "Frame ajoutée avec succès"}, status_code=200)
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e}")
     
 @app.get("/items/")
@@ -137,10 +131,10 @@ async def get_items(mr : Annotated[Maria, Depends(maria_connect)]):
     try : 
         res = mr.get_item()
         res = [dict(row) for row in res]
-        log_debug.debug(f"GET /items/")
+        log.debug(f"GET /items/")
         return JSONResponse(content=res, status_code=200)
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e} - {res} - {type(res)}")
 
 @app.get("/items/{id}")
@@ -148,10 +142,10 @@ async def get_item(mr : Annotated[Maria, Depends(maria_connect)], id: int):
     try : 
         res = mr.get_item(id)
         res = [dict(row) for row in res]
-        log_debug.debug(f"GET /items/{id}")
+        log.debug(f"GET /items/{id}")
         return JSONResponse(content=res, status_code=200)
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e} - {res} - {type(res)}")
 
 
@@ -160,20 +154,20 @@ async def update_item(mr : Annotated[Maria, Depends(maria_connect)], item: Item)
     try : 
         item = item.model_dump()
         res = mr.update_item(id_code=item["id_code"], name=item["name"], brand=item["brand"], ingredient=item["ingredient"], allergen=item["allergen"], nutriment=item["nutriment"], nutriscore=item["nutriscore"], ecoscore=item["ecoscore"] , packaging=item["packaging"], image=item["image"], url_openfoodfact=item["url_openfoodfact"])
-        log_debug.debug(f'UPDATE /items/ {item["id_code"]}')
+        log.debug(f'UPDATE /items/ {item["id_code"]}')
         return JSONResponse(content=res, status_code=200)
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e}")
 
 @app.delete("/items/{id}")
 async def delete_item(mr : Annotated[Maria, Depends(maria_connect)], id: int | None):
     try : 
         res = mr.delete_item(id)
-        log_debug.debug(f"DELETE /items/{id}")
+        log.debug(f"DELETE /items/{id}")
         return JSONResponse(content=res, status_code=200)
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e}")
 
 
@@ -199,10 +193,10 @@ async def record_user(mr : Annotated[Maria, Depends(maria_connect)], user: User)
         age = user["age"]
         gender = user["gender"]
         res = mr.create_user(username=username, last_name=last_name, first_name=first_name, age=age, gender=gender)
-        log_debug.debug(f"POST /users/ : {username}")
+        log.debug(f"POST /users/ : {username}")
         return JSONResponse(content={"message": "User ajouté avec succès", "result" : str(res)}, status_code=200)
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e}")
 
 @app.get("/users/")
@@ -210,10 +204,10 @@ async def get_users(mr : Annotated[Maria, Depends(maria_connect)]):
     try : 
         res = mr.get_user()
         res = [dict(row) for row in res]
-        log_debug.debug(f"GET /users/")
+        log.debug(f"GET /users/")
         return JSONResponse(content=res, status_code=200)
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e}")  
 
 @app.get("/users/{id}")
@@ -221,10 +215,10 @@ async def get_user(mr : Annotated[Maria, Depends(maria_connect)], id : int):
     try : 
         res = mr.get_user(id)
         res = [dict(row) for row in res]
-        log_debug.debug(f"GET /users/{id}")
+        log.debug(f"GET /users/{id}")
         return JSONResponse(content=res, status_code=200)
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e}")
     
 @app.put("/users/{id}")
@@ -237,20 +231,20 @@ async def update_user(mr : Annotated[Maria, Depends(maria_connect)], id : int, u
         age = user["age"]
         gender = user["gender"]
         res = mr.update_user(id_user=id, username=username, last_name=last_name, first_name=first_name, age=age, gender=gender)
-        log_debug.debug(f"PUT /users/{id}")
+        log.debug(f"PUT /users/{id}")
         return JSONResponse(content=res, status_code=200)
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e}")
 
 @app.delete("/users/{id}")
 async def delete_user(mr : Annotated[Maria, Depends(maria_connect)], id: int):
     try : 
         res = mr.delete_user(id)
-        log_debug.debug(f"DELETE /users/{id}")
+        log.debug(f"DELETE /users/{id}")
         return JSONResponse(content=res, status_code=200)
     except Exception as e :
-        log_debug.info(f"erreur : {e}")
+        log.info(f"erreur : {e}")
         raise HTTPException(status_code=422, detail=f"Erreur API : {e}")
 
 

@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from sqlalchemy import create_engine, text
 
 from app.config import *
-from app.log import Logg
+from app.log import log
 
 
 class Maria :
@@ -21,8 +21,7 @@ class Maria :
         
         self.engine_app = create_engine(SQLALCHEMY_DATABASE_APP)
         
-        log = Logg()
-        self.log_debug = log.set_log_api_backend_debug()
+        
 
     def reset_db(self, table) : 
         try : 
@@ -30,9 +29,9 @@ class Maria :
                 query = text(f"DELETE FROM {table}")
                 connection.execute(query) 
                 connection.commit()
-            self.log_debug.info(f"Reset de la base de données {'test' if self.test else 'de production'}")
+            log.info(f"Reset de la base de données {'test' if self.test else 'de production'}")
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
     
 
     # Item
@@ -45,10 +44,10 @@ class Maria :
                 connection.execute(query, {"id_code" : id_code, "brand": brand ,"name": name, "ingredient": ingredient,"allergen" : allergen, "nutriment" : nutriment, "nutriscore" : nutriscore, "ecoscore" : ecoscore, "packaging" : packaging, "image" : image, "url_openfoodfact" : url_openfoodfact}) 
                 connection.commit()
 
-                self.log_debug.info(f"Item {id_code, brand, name} ajouté à la base de données {'test' if self.test else 'de production'}.")
+                log.info(f"Item {id_code, brand, name} ajouté à la base de données {'test' if self.test else 'de production'}.")
             
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
     def get_item(self, id_code : str | None = None) :
         try :  
@@ -61,11 +60,11 @@ class Maria :
                         query = text(f"SELECT * FROM item WHERE id_code = :id_code")
                         result = connection.execute(query, {"id_code" : id_code}) 
             result = result.mappings().all()
-            self.log_debug.info(f"retrieve item {id_code}")
+            log.info(f"retrieve item {id_code}")
             return result
         
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
     
     def update_item(self, id_code : str, brand: str, name: str, ingredient: str, allergen: str, nutriment: str, nutriscore: str, ecoscore: str, packaging: str, image: str, url_openfoodfact: str):
         try : 
@@ -74,10 +73,10 @@ class Maria :
                 connection.execute(query, {"id_code" : id_code, "brand": brand ,"name": name, "ingredient": ingredient,"allergen" : allergen, "nutriment" : nutriment, "nutriscore" : nutriscore, "ecoscore" : ecoscore, "packaging" : packaging, "image" : image, "url_openfoodfact" : url_openfoodfact}) 
                 connection.commit()
 
-            self.log_debug.info(f"Update item {id_code}")
+            log.info(f"Update item {id_code}")
 
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
     def delete_item(self, id_code : str | None = None):
         try :
@@ -89,10 +88,10 @@ class Maria :
                     query = text("DELETE FROM item WHERE id_code=:id_code")
                     connection.execute(query, {"id_code" : id_code})
                 connection.commit()
-            self.log_debug.info(f"Delete item {id_code}")
+            log.info(f"Delete item {id_code}")
 
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
 
     # User
@@ -105,11 +104,11 @@ class Maria :
                 result = connection.execute(query, {"username": username ,"last_name": last_name, "first_name": first_name,"age" : age, "gender" : gender})
                 connection.commit()
 
-            self.log_debug.info(f"Create user {username}")
+            log.info(f"Create user {username}")
             return result
         
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
     def get_user(self, id_user : str | None = None):
         try: 
@@ -122,11 +121,11 @@ class Maria :
                     result = connection.execute(query, {"id_user" : id_user})
 
             result = result.mappings().all()
-            self.log_debug.info(f"retrieve user {id_user}")
+            log.info(f"retrieve user {id_user}")
             return result
         
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
 
     def update_user(self, id_user : str, username: str, last_name: str, first_name: str, age: str, gender: str):
@@ -135,10 +134,10 @@ class Maria :
                 query = text("UPDATE user SET username=:username, last_name=:last_name, first_name=:first_name, age=:age, gender=:gender WHERE id_user = :id_user")
                 connection.execute(query, {"username" : username, "last_name" : last_name, "first_name" : first_name, "age" : age, "gender" : gender, "id_user" :id_user})
                 connection.commit()
-            self.log_debug.info(f"Update user {id_user}")
+            log.info(f"Update user {id_user}")
 
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
     def delete_user(self, id_user : str | None = None):
         try : 
@@ -150,10 +149,10 @@ class Maria :
                     query = text("DELETE FROM user WHERE id_user = :id_user")
                     connection.execute(query, {"id_user" : id_user})
                 connection.commit()
-            self.log_debug.info(f"Delete user {id_user}")
+            log.info(f"Delete user {id_user}")
 
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
     
     # Place
@@ -166,10 +165,10 @@ class Maria :
                 connection.execute(query, {"name": name ,"adresse": adresse, "postcode": postcode, "city" : city})
                 connection.commit()
 
-                self.log_debug.info(f"create place {name}")
+                log.info(f"create place {name}")
 
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
     def get_place(self, id_place : str | None = None):
         try : 
@@ -183,7 +182,7 @@ class Maria :
                 result = result.mappings().all()
                 return result
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
     def update_place(self, id_place : str, name: str, adresse: str, postcode: str, city: str):
         try : 
@@ -193,7 +192,7 @@ class Maria :
                 connection.commit()
 
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
     def delete_place(self, id_place : str):
         try : 
@@ -207,7 +206,7 @@ class Maria :
                 connection.commit()
 
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
 
     # Scan
@@ -225,10 +224,10 @@ class Maria :
                          "VALUES (:id_user, :id_code, :id_place, :date, :year, :month, :day, :hour, :minute)")
                 connection.execute(query, {"id_user" : id_user, "id_code" : id_code, "id_place" : id_place, "date" : date, "year" : year, "month" : month, "day" : day, "hour" : hour, "minute" : minute})
                 connection.commit()
-            self.log_debug.info(f"Create scan {id_code} from {id_user}.")
+            log.info(f"Create scan {id_code} from {id_user}.")
         
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
 
     def get_scan(self, id_user : int | None = None):
         try : 
@@ -244,7 +243,7 @@ class Maria :
                 return result
         
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
             
     def delete_scan(self, id_user : str):
         try : 
@@ -254,7 +253,7 @@ class Maria :
                 connection.commit()
         
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
     
     def authenticate(self, email) : 
         try : 
@@ -268,6 +267,6 @@ class Maria :
             return result
         
         except Exception as e : 
-            self.log_debug.debug(e)
+            log.debug(e)
     
     
