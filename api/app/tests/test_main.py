@@ -7,6 +7,8 @@ from app.main import app, maria_connect
 from app.maria import Maria
 from config import API_KEYS
 
+from app.log import log
+
 
 client = TestClient(app)
 
@@ -359,5 +361,12 @@ def test_auth() :
     
     res = client.post(f"/authenticate/", data=data, headers=headers)
     res = res.json()
-    print(res)
     assert res["success"] == True
+
+def test_log() :
+    res = client.get(f"/logs/api-ia", headers=headers)
+    log.debug(res)
+    assert res.status_code == 200
+    res = res.json()
+    log.debug(res)
+
