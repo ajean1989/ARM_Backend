@@ -380,6 +380,11 @@ async def delete_scan(mr : Annotated[Maria, Depends(maria_connect)], id: int):
 async def retrieve_log(mr : Annotated[Maria, Depends(maria_connect)], theme : str):
     try : 
         log.info(f"/logs/{theme} GET : init")
+
+        # On créer un dossier si il n'eexiste pas déjà. 
+        if "log" not in os.listdir("app") :
+            os.makedirs(os.path.join("app","log"), exist_ok=True)
+
         with open(os.path.join("app", "log", f"{theme}.log"), 'r') as log_file:
             lignes = log_file.readlines()
              # Modifier chaque ligne en ajoutant '<br>' à la fin
