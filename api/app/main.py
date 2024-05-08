@@ -384,6 +384,7 @@ async def retrieve_log(mr : Annotated[Maria, Depends(maria_connect)], theme : st
 
         # On créer un dossier si il n'eexiste pas déjà. 
         log.debug(f"{os.listdir('app')}")
+        log.debug(f"{os.listdir(os.path.join('app', 'log'))}")
 
         if "log" not in os.listdir("app") :
             os.makedirs(os.path.join("app","log"), exist_ok=True)
