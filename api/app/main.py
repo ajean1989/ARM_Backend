@@ -383,15 +383,15 @@ async def retrieve_log(mr : Annotated[Maria, Depends(maria_connect)], theme : st
         log.info(f"/logs/{theme} GET : init")
 
         # On créer un dossier si il n'eexiste pas déjà. 
-        log.debug(f"{os.listdir("app")}")
-        
+        log.debug(f"{os.listdir('app')}")
+
         if "log" not in os.listdir("app") :
             os.makedirs(os.path.join("app","log"), exist_ok=True)
             with open(os.path.join("app", "log", f"{theme}.log"), "w") as f:
                 f.write(f"init log : {datetime.now().strftime('%Y-%m-%d')}")
 
-        log.debug(f"{os.listdir("app")}")
-        log.debug(f"{os.listdir(os.path.join("app", "log"))}")
+        log.debug(f"{os.listdir('app')}")
+        log.debug(f"{os.listdir(os.path.join('app', 'log'))}")
 
         with open(os.path.join("app", "log", f"{theme}.log"), 'r') as log_file:
             lignes = log_file.readlines()
