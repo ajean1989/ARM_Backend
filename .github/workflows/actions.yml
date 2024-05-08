@@ -122,7 +122,7 @@ jobs:
       run: cat ~/.ssh/id_test && ssh -i ~/.ssh/id_test -o StrictHostKeyChecking=no debian@$SERVER_VPS1_IP "if [docker container ps -a | grep -q 'api-backend']; then docker rm -f api-backend; fi"
 
     - name: Copy api files
-      run: scp -i ~/.ssh/id_test -r ./api/* debian@$SERVER_VPS1_IP:/home/debian/ARMarket/ARM_Backend/
+      run: scp -i ~/.ssh/id_test -r ./api/* debian@$SERVER_VPS1_IP:/home/debian/ARMarket/ARM_Backend/api
 
     - name: Copy run file
       run: scp -i ~/.ssh/id_test ./run/build.sh debian@$SERVER_VPS1_IP:/home/debian/ARMarket/ARM_Backend/build.sh
