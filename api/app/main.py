@@ -388,7 +388,7 @@ async def retrieve_log(mr : Annotated[Maria, Depends(maria_connect)], theme : st
 
         if "log" not in os.listdir("app") :
             os.makedirs(os.path.join("app","log"), exist_ok=True)
-        if theme not in os.listdir("app", "log") :
+        if theme not in os.listdir(os.path.join("app", "log")) :
             with open(os.path.join("app", "log", f"{theme}.log"), "w") as f:
                 f.write(f"init log : {datetime.now().strftime('%Y-%m-%d')}")
 
