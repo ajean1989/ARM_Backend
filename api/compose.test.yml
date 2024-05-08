@@ -2,6 +2,6 @@ services:
 
   api-backend:
     labels:
-        - traefik.http.routers.api-ia.rule= Host(`traefik`) && PathPrefix(`/api-backend/`)
-        - traefik.http.routers.api-ia-tls.tls.domains[0].main=traefik
-        - traefik.http.routers.api-ia-tls.tls.domains[0].sans=traefik
+        - traefik.http.routers.api-backend.rule= Host(`traefik`) && PathPrefix(`/api-backend/`)
+        - traefik.http.routers.api-backend-tls.tls.domains[0].main=traefik
+        - traefik.http.routers.api-backend-tls.tls.domains[0].sans=traefik
