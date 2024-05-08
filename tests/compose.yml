@@ -1,26 +1,19 @@
-version: '3.8'
-
 services:
-  api-backend:
+  tests:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: api-backend
+    container_name: tests-api-backend
     environment:
       SERVER_VPS1_IP : ${SERVER_VPS1_IP:?error}
       USER_MARIADB : ${USER_MARIADB:?error}
       PWD_MARIADB : ${PWD_MARIADB:?error}
       ARM_VPS1_API_KEY : ${ARM_VPS1_API_KEY:?error}
-    ports :
-      - 6001:6001
-    volumes : 
-      - ./app:/api/app
-      - ../../log:/api/app/log
+      USER_MONGODB: ${USER_MONGODB:?error}
+      PWD_MONGODB: ${PWD_MONGODB:?error}
+
     networks:
       - production-network
-    labels:
-      - traefik.http.routers.api-backend.rule=PathPrefix(`/api-backend/`)
-
 
 networks:
   production-network:

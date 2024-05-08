@@ -1,0 +1,7 @@
+services:
+
+  api-backend:
+    labels:
+      - traefik.http.routers.api-backend.rule= Host(`jacquenet.com`) && PathPrefix(`/api-backend/`)
+      - traefik.http.routers.api-backend.tls.certresolver=myresolver
+      - traefik.http.routers.api-backend-tls.tls.domains[0].main=jacquenet.com

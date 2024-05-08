@@ -4,7 +4,7 @@
 set -e
 
 cd ./api
-docker compose up  --build -d
+docker compose up  -f compose.yml -f compose.dev.yml --build -d
 
 cd ../tests
 docker compose up  --build -d
