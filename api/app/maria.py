@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from sqlalchemy import create_engine, text
 
 from app.config import *
-from app.log import log
+from app.logger import log
 
 
 class Maria :
