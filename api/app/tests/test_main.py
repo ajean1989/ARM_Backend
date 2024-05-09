@@ -7,7 +7,7 @@ from app.main import app, maria_connect
 from app.maria import Maria
 from config import API_KEYS
 
-from app.log import log
+from app.logger import log
 
 
 client = TestClient(app)
